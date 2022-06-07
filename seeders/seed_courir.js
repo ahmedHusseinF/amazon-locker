@@ -5,7 +5,7 @@ import faker from '@faker-js/faker';
 
 export default async function () {
   await Courir.create({
-    id: faker.random.numeric(6),
+    id: 447570,
     password: 'test12345',
   });
   
