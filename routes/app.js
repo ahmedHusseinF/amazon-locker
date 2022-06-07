@@ -71,4 +71,12 @@ router.get('/get_products', async (req, res) => {
   return res.status(200).json(products);
 });
 
+router.get('/get_orders', validateAuth, async (req, res) => {
+  const { user_id } = req.user;
+
+  const orders = await Order.findAll({ where: {UserId: user_id}, include: ['Location', 'Product'] });
+
+  return res.status(200).json(orders);
+});
+
 export default router;
