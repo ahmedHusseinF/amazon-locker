@@ -1,0 +1,36 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seeders/index.js",
+    "models": "node models/index.js",
+    "docs": "apidoc -i ./routes -o ./docs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "sequelize": "^6.19.0",
+    "sqlite3": "^5.0.8"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^6.3.1",
+    "apidoc": "^0.51.1"
+  },
+  "apidoc": {
+    "title": "Amazon Locker Server Docs",
+    "version": "0.0.1",
+    "template": {
+      "forceLanguage": "en",
+      "showRequiredLabels": true
+    }
+  }
+}
