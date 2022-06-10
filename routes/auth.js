@@ -58,11 +58,13 @@ router.post('/login', async (req, res) => {
       error: 'Password is not correct',
     });
   }
-  const access_token = jwt.sign({ user_id: user.id, email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  const access_token = jwt.sign({ user_id: user.id, email }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
   return res.status(200).json({
     access_token,
     user_id: user.id,
+    name: user.name,
+    email: user.email
   });
 });
 
