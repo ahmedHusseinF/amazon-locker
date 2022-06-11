@@ -5,7 +5,7 @@ import { User } from '../models/index.js';
 const router = express.Router();
 
 router.post('/register', async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, password, name, fcmToken } = req.body;
 
   if (!email || !password || !name) {
     return res.status(400).json({
@@ -17,6 +17,7 @@ router.post('/register', async (req, res) => {
     email,
     password,
     name,
+    fcmToken
   });
 
   try {

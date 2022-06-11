@@ -1,8 +1,15 @@
 import express from 'express';
-import validateAuth from '../middlewares/validateAuth.js';
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getMessaging } from 'firebase-admin/messaging';
 import { Order, Courir } from '../models/index.js';
+import serviceAccount from "../firebase-creds.json" assert {type: "json"};
 
 const router = express.Router();
+initializeApp({
+  credential: cert(serviceAccount),
+
+});
+const fcm = getMessaging();
 
 router.post('/validate_otp', async (req, res) => {
   const { otp } = req.body;
@@ -45,10 +52,22 @@ router.post('/insert_package', async (req, res) => {
   }
 
   const order = await Order.findByPk(order_id);
-
+  const user = await order.getUser();
   order.status = 'in_locker';
   order.box_number = box_number;
   await order.save();
+  
+  if (user.fcmToken) {
+    await fcm.send({
+      token: order.user.fcmToken,
+      notification: { 
+        title: "Your package has been delivered to the locker 🎉",
+        body: `Your order of ${order.product.name} has been successfully delivered to the chosen locker. You can collect it now.`,
+        imageUrl: "https://locker.fekry.dev/images/n.jpg"
+      }
+    });
+  }
+  
 
   return res.status(200).json({
     message: 'Package inserted successfully',

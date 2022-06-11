@@ -23,6 +23,9 @@ const User = Sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  fcmToken: {
+    type: DataTypes.TEXT,
+  }
 });
 
 User.beforeCreate((user) => {

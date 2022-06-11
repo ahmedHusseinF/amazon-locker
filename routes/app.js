@@ -55,7 +55,7 @@ router.post('/buy_product', validateAuth, async (req, res) => {
 
   return res.status(201).json({
     message: 'Product ordered successfully',
-    order_id: order.id,
+    order: order.toJSON(),
   });
 });
 
