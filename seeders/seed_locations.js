@@ -1,22 +1,52 @@
 import { Location } from '../models/index.js';
 import faker from '@faker-js/faker';
 
-export default async function () { 
+export default async function () {
+  let locs = [
+    {
+      lat: "30.072886",
+      lng: "31.345851",
+      name: "City Stars Locker (Nasr City)"
+    },
+    {
+      lat: "29.998853",
+      lng: "31.173742",
+      name: "Cairo Mall Locker (Haram)"
+    },
+    {
+      lat: "29.963305",
+      lng: "30.926505",
+      name: "City Scape Mall Locker (6th of October)"
+    },
+    {
+      lat: "29.965578",
+      lng: "31.270191",
+      name: "Maadi Grand Mall Locker (Maadi)"
+    }
+  ];
+
   await Location.create({
-    lat: faker.address.latitude(),
-    lng: faker.address.longitude(),
+    lat: "30.081898",
+    lng: "31.017981",
     name: "AAST Locker",
     active: true
   });
 
   for (let i = 1; i <= 4; i++) {
     await Location.create({
-      lat: faker.address.latitude(),
-      lng: faker.address.longitude(),
-      name: faker.address.streetName() + " Locker",
-      active: false,
+      lat: locs[i-1].lat,
+      lng: locs[i-1].lng,
+      name: locs[i-1].name,
+      active: true,
     });
   }
+
+  await Location.create({
+    lat: "30.044665",
+    lng: "31.236245",
+    name: "Locker for Disabled People (Tahrir)",
+    active: true
+  })
 
   console.log('Seeded Locations');
 }
