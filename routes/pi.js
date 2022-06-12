@@ -59,7 +59,7 @@ router.post('/insert_package', async (req, res) => {
   
   if (user.fcmToken) {
     await fcm.send({
-      token: order.user.fcmToken,
+      token: user.fcmToken,
       notification: { 
         title: "Your package has been delivered to the locker 🎉",
         body: `Your order of ${order.product.name} has been successfully delivered to the chosen locker. You can collect it now.`,
