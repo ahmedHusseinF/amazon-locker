@@ -53,6 +53,7 @@ router.post('/insert_package', async (req, res) => {
 
   const order = await Order.findByPk(order_id);
   const user = await order.getUser();
+  const product = await order.getProduct();
   order.status = 'in_locker';
   order.box_number = box_number;
   await order.save();
@@ -62,7 +63,7 @@ router.post('/insert_package', async (req, res) => {
       token: user.fcmToken,
       notification: { 
         title: "Your package has been delivered to the locker 🎉",
-        body: `Your order of ${order.product.name} has been successfully delivered to the chosen locker. You can collect it now.`,
+        body: `Your order of ${product.name} has been successfully delivered to the chosen locker. You can collect it now.`,
         imageUrl: "https://locker.fekry.dev/images/n.jpg"
       }
     });
