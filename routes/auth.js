@@ -23,8 +23,9 @@ router.post('/register', async (req, res) => {
   try {
     await user.save();
   } catch (error) {
+    const formattedErr = error.name.includes('Unique') ? "This email was used to sign up before." : "Make sure you enter all the user data.";
     return res.status(400).json({
-      error,
+      error: formattedErr,
     });
   }
 
