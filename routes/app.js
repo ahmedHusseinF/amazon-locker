@@ -38,12 +38,18 @@ router.post('/buy_product', validateAuth, async (req, res) => {
     });
   }
 
-  const location = await Location.findByPk(location_id, { raw: true });
+  const location = await Location.findByPk(location_id);
 
   if (!location) {
     return res.status(404).json({
       error: 'Location not found',
     });
+  }
+
+  if (location.remainingLockers <= 0) {
+    return res.status(400).json({
+      error: 'There are no more lockers available in this location'
+    })
   }
 
   const order = await Order.create({
@@ -53,11 +59,13 @@ router.post('/buy_product', validateAuth, async (req, res) => {
     LocationId: location_id,
   });
 
+  await location.decrement("remainingLockers");
+
   return res.status(201).json({
     message: 'Product ordered successfully',
     order: order.toJSON(),
-    location: order.getLocation(),
-    product: order.getProduct()
+    location: await order.getLocation(),
+    product: await order.getProduct()
   });
 });
 

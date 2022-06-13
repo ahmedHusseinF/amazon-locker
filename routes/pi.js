@@ -14,7 +14,7 @@ const fcm = getMessaging();
 router.post('/validate_otp', async (req, res) => {
   const { otp } = req.body;
 
-  const order = await Order.findOne({ otp });
+  const order = await Order.findOne({ where: {otp} });
 
   if (!order) {
     return res.status(400).json({
@@ -28,8 +28,18 @@ router.post('/validate_otp', async (req, res) => {
     });
   }
 
+  if (order.status != 'in_locker') {
+    return res.status(400).json({
+      error: 'The package has not been delivered yet'
+    })
+  }
+
   order.status = "picked_up";
   await order.save();
+
+  const location = await order.getLocation();
+  await location.increment('remainingLockers');
+
 
   return res.status(200).json({
     box_number: order.box_number,
@@ -51,9 +61,18 @@ router.post('/insert_package', async (req, res) => {
     return res.status(400).json('Invalid courir password');
   }
 
+
   const order = await Order.findByPk(order_id);
   const user = await order.getUser();
   const product = await order.getProduct();
+  const location = await order.getLocation();
+
+  if (order.status != "pending") {
+    return res.status(400).json({
+      error: "The package may have been deilvered already."
+    })
+  }
+
   order.status = 'in_locker';
   order.box_number = box_number;
   await order.save();
@@ -64,11 +83,15 @@ router.post('/insert_package', async (req, res) => {
       notification: { 
         title: "Your package has been delivered to the locker 🎉",
         body: `Your order of ${product.product_name} has been successfully delivered to the chosen locker. You can collect it now.`,
-        imageUrl: "https://locker.fekry.dev/images/n.jpg"
+        imageUrl: "https://locker.fekry.dev/images/n.jpg",
+        data: {
+          order,
+          product,
+          location
+        }
       }
     });
   }
-  
 
   return res.status(200).json({
     message: 'Package inserted successfully',

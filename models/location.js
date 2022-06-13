@@ -23,6 +23,8 @@ const Location = Sequelize.define('Location', {
     allowNull: false,
   },
   active: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+  lockersCount: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
+  remainingLockers: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 }
 });
 
 export default Location;
