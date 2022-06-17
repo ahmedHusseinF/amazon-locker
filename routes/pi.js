@@ -84,11 +84,6 @@ router.post('/insert_package', async (req, res) => {
         title: "Your package has been delivered to the locker 🎉",
         body: `Your order of ${product.product_name} has been successfully delivered to the chosen locker. You can collect it now.`,
         imageUrl: "https://locker.fekry.dev/images/n.jpg",
-        data: {
-          order,
-          product,
-          location
-        }
       }
     });
   }
