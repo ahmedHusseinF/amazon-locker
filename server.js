@@ -11,7 +11,6 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-//app.use('/docs', express.static('docs'));
 
 app.use('/auth', authRoutes);
 app.use('/app', appRoutes);
@@ -21,6 +20,7 @@ app.get('/ping', (_, res) => {
   res.status(200).send('pong');
 });
 
-app.listen(process.env.PORT, '0.0.0.0', () => {
-  console.log('Server started on port 3000');
+const port = process.env.PORT || 3000;
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server started on port ${port}`);
 });
